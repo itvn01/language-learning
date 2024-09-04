@@ -8,8 +8,9 @@ namespace M1PetGame
 {
     public class UITabbarItem : MonoBehaviour
     {
+        [SerializeField] protected Button btn;
         [SerializeField] Image imgBg;
-        [SerializeField] Image imgIcon;
+        [SerializeField] public Image imgIcon;
         [SerializeField] Text textTitle;
         [SerializeField] Sprite sprNormal;
         [SerializeField] Sprite sprChoose;
@@ -25,10 +26,23 @@ namespace M1PetGame
 
         public Action<int> acTabClick;
 
+        protected virtual void OnEnable()
+        {
+            if (this.btn) this.btn.onClick.AddListener(this.OnTabClicked);
+        }
+
+        protected virtual void OnDisable()
+        {
+            if (this.btn) this.btn.onClick.RemoveAllListeners();
+
+        }
+
         public virtual void OnTabClicked()
         {
+            // Debug.Log("Test => OnTabClicked");
             if (this.acTabClick != null && isEnable)
             {
+                SoundBase.Instance.PlayOneShot(SoundBase.Instance.click);
                 this.acTabClick(this.index);
             }
         }
@@ -75,6 +89,7 @@ namespace M1PetGame
 
         public virtual void SetTabbarEnable(bool isEnable)
         {
+            this.btn.interactable = isEnable;
             this.isEnable = isEnable;
             this.imgIcon.color = isEnable ? colorEnable : colorDisable;
             this.textTitle.color = this.imgIcon.color;

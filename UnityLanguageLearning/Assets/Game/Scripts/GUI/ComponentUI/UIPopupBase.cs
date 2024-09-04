@@ -13,11 +13,13 @@ namespace M1PetGame
         BOTTOM,
         LEFT,
         RIGHT,
-        ZOOM
+        ZOOM,
+        NONE
     }
 
     public class UIPopupBase : MonoBehaviour
     {
+        [SerializeField] public GameObject popupObj;
         [SerializeField] public GameObject background;
         [SerializeField] Image blackPanel;
         [SerializeField] public Button btnClose;
@@ -25,33 +27,43 @@ namespace M1PetGame
         public bool isFadeBackground = false;
         private TRANSITION_TYPE showType = TRANSITION_TYPE.ZOOM;
         private TRANSITION_TYPE hideType = TRANSITION_TYPE.ZOOM;
-        public float DURATION_MOVE = 0.3f;
-        public float DURATION_ZOOM = 0.3f;
+        public float DURATION_MOVE_SHOW = 0.3f;
+        public float DURATION_MOVE_HIDE = 0.3f;
+        public float DURATION_ZOOM_SHOW = 0.3f;
+        public float DURATION_ZOOM_HIDE = 0.3f;
         public float BLACK_OPACITY = 180.0f / 255.0f;
         private bool _isAnimRunning = false;
         private Vector3 _originPosition;
 
-        public virtual void Awake()
+        protected virtual void Awake()
         {
-            this._originPosition = this.background.transform.position;
+            this._originPosition = this.background.transform.localPosition;
             // Debug.LogFormat("_originPosition => {0}", _originPosition.ToString());
         }
 
-        public virtual void Start()
+        protected virtual void Start()
         {
-            if (this.blackPanel)
-            {
-                var btnBlackClose = this.blackPanel.GetComponent<Button>();
-                if (btnBlackClose)
-                {
-                    btnBlackClose.onClick.AddListener(delegate { OnBtnCloseClicked(btnBlackClose); });
-                }
-            }
-
-            if (this.btnClose)
+            if (this.btnClose != null)
             {
                 btnClose.onClick.AddListener(delegate { OnBtnCloseClicked(btnClose); });
             }
+
+            if (this.blackPanel)
+            {
+                var btnBlackClose = this.blackPanel.GetComponent<Button>();
+                if (btnBlackClose != null)
+                {
+                    btnBlackClose.onClick.AddListener(delegate { OnBtnCloseClicked(btnBlackClose); });
+
+                    if (btnClose == null)
+                        btnClose = btnBlackClose;
+                }
+            }
+        }
+
+        bool IsTransitionMove(TRANSITION_TYPE type)
+        {
+            return type != TRANSITION_TYPE.ZOOM && type != TRANSITION_TYPE.NONE;
         }
 
         public virtual void Show(TRANSITION_TYPE showType = TRANSITION_TYPE.ZOOM, TRANSITION_TYPE hideType = TRANSITION_TYPE.ZOOM, Action callback = null)
@@ -68,39 +80,45 @@ namespace M1PetGame
             {
 
                 this.background.transform.localScale = Vector3.one * 0.8f;
-                this.background.transform.DOScale(Vector3.one, DURATION_ZOOM).SetEase(Ease.OutBack).OnComplete(() =>
+                this.background.transform.DOScale(Vector3.one, DURATION_ZOOM_SHOW).SetEase(Ease.OutBack).OnComplete(() =>
                 {
                     this.OnShowComplete(callback);
                 });
             }
-            else
+            else if (this.IsTransitionMove(this.showType))
             {
                 this.ShowByMove(() =>
                 {
                     this.OnShowComplete(callback);
                 });
             }
+            else if (this.hideType == TRANSITION_TYPE.NONE)
+            {
+                this.ActionWaitTime(DURATION_ZOOM_SHOW, () => this.OnShowComplete(callback));
+            }
         }
 
-        public virtual void hide(Action callback)
+        public virtual void hide(Action callback = null)
         {
             if (this._isAnimRunning) return;
             this._isAnimRunning = true;
 
             if (this.hideType == TRANSITION_TYPE.ZOOM)
             {
-                this.background.transform.DOScale(Vector3.one * 0.8f, DURATION_ZOOM).SetEase(Ease.InBack).OnComplete(() =>
+                this.background.transform.DOScale(Vector3.one * 0.8f, DURATION_ZOOM_HIDE).SetEase(Ease.InBack).OnComplete(() =>
                 {
                     this.OnHideComplete(callback);
                 });
             }
-            else
+            else if (this.IsTransitionMove(this.hideType))
             {
                 this.HideByMove(() =>
                 {
                     this.OnHideComplete(callback);
                 });
-
+            }
+            else if (this.hideType == TRANSITION_TYPE.NONE) {
+                this.ActionWaitTime(DURATION_ZOOM_SHOW, () => this.OnHideComplete(callback));
             }
 
             this.FadeOut();
@@ -116,7 +134,10 @@ namespace M1PetGame
 
             if (this.isDestroyWhenHide)
             {
-                Destroy(this.gameObject);
+                if (this.popupObj == null)
+                    this.popupObj = gameObject;
+
+                Destroy(this.popupObj);
             }
             else
             {
@@ -124,7 +145,10 @@ namespace M1PetGame
                 {
                     this.blackPanel.gameObject.SetActive(false);
                 }
-                this.gameObject.SetActive(false);
+                if (this.popupObj == null)
+                    this.popupObj = gameObject;
+
+                this.popupObj.SetActive(false);
             }
         }
 
@@ -142,35 +166,35 @@ namespace M1PetGame
         {
             var target_position = this._originPosition;
             var start_posision = new Vector3();
-            var width = Screen.width;
-            var height = Screen.height;
+            var width = Math.Max(Screen.width, 1242);
+            var height = Math.Max(Screen.height, 2688);
 
             switch (this.showType)
             {
                 case TRANSITION_TYPE.TOP:
-                    start_posision = new Vector3(target_position.x, target_position.y + height * 1.5f);
+                    start_posision = new Vector3(target_position.x, target_position.y + height* 1.5f);
                     break;
 
                 case TRANSITION_TYPE.BOTTOM:
-                    start_posision = new Vector3(target_position.x, target_position.y - height * 1.5f);
+                    start_posision = new Vector3(target_position.x, target_position.y - height* 1.5f);
                     break;
 
                 case TRANSITION_TYPE.LEFT:
-                    start_posision = new Vector3(target_position.x - width * 1.5f, target_position.y);
+                    start_posision = new Vector3(target_position.x - width* 1.5f, target_position.y);
                     break;
 
                 case TRANSITION_TYPE.RIGHT:
-                    start_posision = new Vector3(target_position.x + width * 1.5f, target_position.y);
+                    start_posision = new Vector3(target_position.x + width* 1.5f, target_position.y);
                     break;
 
                 default:
-                    start_posision = new Vector3(target_position.x, target_position.y + height * 1.5f);
+                    start_posision = new Vector3(target_position.x, target_position.y + height* 1.5f);
                     break;
             }
 
             // Debug.LogFormat("start_posision => {0}", start_posision.ToString());
-            this.background.transform.position = start_posision;
-            this.background.transform.DOMove(target_position, DURATION_MOVE).OnComplete(() =>
+            this.background.transform.localPosition = start_posision;
+            this.background.transform.DOLocalMove(target_position, DURATION_MOVE_SHOW).SetEase(Ease.OutCirc).OnComplete(() =>
             {
                 if (callback != null)
                 {
@@ -182,46 +206,46 @@ namespace M1PetGame
         private void HideByMove(Action callback)
         {
             var target_position = new Vector3();
-            var start_posision = this.background.transform.position;
-            var width = Screen.width;
-            var height = Screen.height;
+            var start_posision = this.background.transform.localPosition;
+            var width = Math.Max(Screen.width, 1242);
+            var height = Math.Max(Screen.height, 2688);
 
             switch (this.hideType)
             {
                 case TRANSITION_TYPE.TOP:
-                    target_position = new Vector3(start_posision.x, start_posision.y + height * 1.5f);
+                    target_position = new Vector3(start_posision.x, start_posision.y + height* 1.5f);
                     break;
 
                 case TRANSITION_TYPE.BOTTOM:
-                    target_position = new Vector3(start_posision.x, start_posision.y - height * 1.5f);
+                    target_position = new Vector3(start_posision.x, start_posision.y - height* 1.5f);
                     break;
 
                 case TRANSITION_TYPE.LEFT:
-                    target_position = new Vector3(start_posision.x - width * 1.5f, start_posision.y);
+                    target_position = new Vector3(start_posision.x - width* 1.5f, start_posision.y);
                     break;
 
                 case TRANSITION_TYPE.RIGHT:
-                    target_position = new Vector3(start_posision.x + width * 1.5f, start_posision.y);
+                    target_position = new Vector3(start_posision.x + width* 1.5f, start_posision.y);
                     break;
 
                 default:
-                    target_position = new Vector3(start_posision.x, start_posision.y + height * 1.5f);
+                    target_position = new Vector3(start_posision.x, start_posision.y + height* 1.5f);
                     break;
             }
 
-            this.background.transform.DOMove(target_position, DURATION_MOVE).OnComplete(() =>
+            this.background.transform.DOLocalMove(target_position, DURATION_MOVE_HIDE).SetEase(Ease.OutCubic).OnComplete(() =>
             {
                 if (callback != null)
                 {
                     callback();
-                    this.background.transform.position = start_posision;
+                    this.background.transform.localPosition = start_posision;
                 }
             });
         }
 
         private void FadeIn()
         {
-            float duration = this.showType == TRANSITION_TYPE.ZOOM ? this.DURATION_ZOOM : this.DURATION_MOVE;
+            float duration = this.showType == TRANSITION_TYPE.ZOOM ? this.DURATION_ZOOM_SHOW : this.DURATION_MOVE_SHOW;
             if (this.isFadeBackground)
             {
                 var canvasGroup = this.background.GetComponent<CanvasGroup>();
@@ -245,7 +269,7 @@ namespace M1PetGame
 
         private void FadeOut()
         {
-            float duration = this.showType == TRANSITION_TYPE.ZOOM ? this.DURATION_ZOOM : this.DURATION_MOVE;
+            float duration = this.showType == TRANSITION_TYPE.ZOOM ? this.DURATION_ZOOM_HIDE : this.DURATION_MOVE_HIDE;
             if (this.isFadeBackground)
             {
                 var canvasGroup = this.background.GetComponent<CanvasGroup>();

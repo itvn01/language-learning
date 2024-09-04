@@ -11,6 +11,12 @@ namespace M1PetGame
             this.ShowAlert();
         }
 
+        public void ShowAlert(string content)
+        {
+            this.SetTitleAndContent("", content);
+            this.ShowAlert();
+        }
+
         public void ShowAlert()
         {
             base.Show();

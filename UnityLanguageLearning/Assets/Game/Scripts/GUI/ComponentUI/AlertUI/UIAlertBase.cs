@@ -19,21 +19,21 @@ namespace M1PetGame
 
         bool _isConfirmed = false;
         private int _tag = 0;
-        public override void Start()
+        protected override void Start()
         {
             base.Start();
-            if (this.btnLeft) this.btnLeft.onClick.AddListener(this.OnBtnLeftClicked);
-            if (this.btnRight) this.btnRight.onClick.AddListener(this.OnBtnRightClicked);
+            if (this.btnLeft != null) this.btnLeft.onClick.AddListener(this.OnBtnLeftClicked);
+            if (this.btnRight != null) this.btnRight.onClick.AddListener(this.OnBtnRightClicked);
         }
 
         public void SetTitleAndContent(string title, string content)
         {
-            if (this.txtTitle && title.Length > 0)
+            if (this.txtTitle != null && title.Length > 0)
             {
                 this.txtTitle.text = title;
             }
 
-            if (this.txtContent)
+            if (this.txtContent != null)
             {
                 this.txtContent.text = content;
             }
@@ -41,12 +41,28 @@ namespace M1PetGame
 
         public void SetTextLeftNRight(string leftStr, string rightStr)
         {
-            if (this.txtLeft)
+            if (this.txtLeft != null)
             {
                 this.txtLeft.text = leftStr;
             }
 
-            if (this.txtRight)
+            if (this.txtRight != null)
+            {
+                this.txtRight.text = rightStr;
+            }
+        }
+
+        public void SetBtnTextLeft(string leftStr)
+        {
+            if (this.txtLeft != null)
+            {
+                this.txtLeft.text = leftStr;
+            }
+        }
+
+        public void SetBtnTextRight(string rightStr)
+        {
+            if (this.txtRight != null)
             {
                 this.txtRight.text = rightStr;
             }
@@ -61,6 +77,7 @@ namespace M1PetGame
         {
             if (this._isConfirmed) return;
             this._isConfirmed = true;
+            SoundBase.Instance.PlayOneShot(SoundBase.Instance.click);
 
             this.OnClose(null, () =>
             {
@@ -76,6 +93,7 @@ namespace M1PetGame
         {
             if (this._isConfirmed) return;
             this._isConfirmed = true;
+            SoundBase.Instance.PlayOneShot(SoundBase.Instance.click);
 
             this.OnClose(null, () =>
             {

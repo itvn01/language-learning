@@ -14,16 +14,23 @@ namespace M1PetGame
         protected List<UITabbarItem> listTabItems = new List<UITabbarItem>();
         protected virtual void Awake()
         {
+            
+        }
+
+        protected virtual void OnEnable() {
             if (tabbarContainer == null)
                 tabbarContainer = transform;
 
-            foreach (Transform child in tabbarContainer)
+            if (listTabItems.Count == 0)
             {
-                var comp = child.GetComponent<UITabbarItem>();
-                if (comp)
+                foreach (Transform child in tabbarContainer)
                 {
-                    listTabItems.Add(comp);
-                    comp.acTabClick = this.OnTabItemClicked;
+                    var comp = child.GetComponent<UITabbarItem>();
+                    if (comp)
+                    {
+                        listTabItems.Add(comp);
+                        comp.acTabClick = this.OnTabItemClicked;
+                    }
                 }
             }
 
@@ -33,11 +40,12 @@ namespace M1PetGame
             }
         }
 
-        public virtual void OnTabItemClicked(int index)
+        protected virtual void OnTabItemClicked(int index)
         {
-            // Debug.Log("OnTabItemClicked = " + index + " | " + this._currentIndex + " | " + transform.childCount);
             if (index >= transform.childCount || index < 0) return;
             if (this._currentIndex == index) return;
+            // Debug.Log("OnTabItemClicked = " + index + " | " + this._currentIndex + " | " + transform.childCount);
+
             for (int i = 0; i < listTabItems.Count; i++)
             {
                 var item = listTabItems[i];

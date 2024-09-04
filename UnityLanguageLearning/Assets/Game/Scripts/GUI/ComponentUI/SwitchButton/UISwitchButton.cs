@@ -30,7 +30,7 @@ namespace M1PetGame {
         }
 
 
-        protected void InitWithStatus(bool status)
+        public void InitWithStatus(bool status)
         {
             this.status = status;
             this.dot.transform.position = this.GetDotTarget(this.status);
@@ -39,6 +39,7 @@ namespace M1PetGame {
 
         protected void OnBtnSwitchClicked()
         {
+            SoundBase.Instance.PlayOneShot(SoundBase.Instance.click);
             this.btnSwitch.interactable = false;
             this.status = !this.status;
 

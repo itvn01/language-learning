@@ -5,7 +5,7 @@ using DG.Tweening;
 using System;
 using UMExtensions;
 
-namespace M1PetGame
+namespace M1Game
 {
     public static class TweenUtils
     {

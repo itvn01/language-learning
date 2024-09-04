@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace M1PetGame
+namespace M1Game
 {
     public class AutodisableGameObjectTimer : MonoBehaviour
     {

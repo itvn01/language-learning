@@ -4,7 +4,7 @@ using System;
 using DG.Tweening;
 using UMExtensions;
 
-namespace M1PetGame
+namespace M1Game
 {
     [System.Serializable]
     public enum TRANSITION_TYPE

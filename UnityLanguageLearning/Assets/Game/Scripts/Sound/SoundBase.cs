@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using Random = UnityEngine.Random;
-using M1PetGame;
+using M1Game;
 using UMExtensions;
 /// <summary>
 /// Sound manager
@@ -24,23 +24,16 @@ public class SoundBase : MonoBehaviour
 
     [Header("Audio Clips")]
     [SerializeField] public AudioClip click;
-    [SerializeField] public AudioClip feedSpawnSfx;
-    [SerializeField] public AudioClip feedBounceSfx;
-    [SerializeField] public AudioClip vitaminSfx;
-    [SerializeField] public AudioClip birthSfx;
-    [SerializeField] public AudioClip evolutionSfx;
-    [SerializeField] public AudioClip toiletSfx;
-    [SerializeField] public AudioClip collectPointSfx;
 
     [Header("Loop Sounds")]
-    [SerializeField] List<PetSound> _listSfxLoopSounds;
+    [SerializeField] List<SoundItem> _listSfxLoopSounds;
 
     [Header("AudioMixer")]
     [SerializeField] public AudioMixer audioMixer;
 
     private AudioSource _audioSource;
     List<AudioClip> clipsPlaying = new List<AudioClip>();
-    private Dictionary<string, PetSound> _sfxLoopSoundsDict = new Dictionary<string, PetSound>();
+    private Dictionary<string, SoundItem> _sfxLoopSoundsDict = new Dictionary<string, SoundItem>();
 
     void Awake()
     {
@@ -75,7 +68,7 @@ public class SoundBase : MonoBehaviour
 
     private void Start()
     {
-        bool soundOn = PlayerPrefs.GetInt(M1PetGame.PetGameConstants.SETTINGS_SOUND_KEY, 1) >= 1;
+        bool soundOn = PlayerPrefs.GetInt(M1Game.GameConstants.SETTINGS_SOUND_KEY, 1) >= 1;
         audioMixer.SetFloat("SoundVolume", soundOn ? 1 : -80);
     }
 

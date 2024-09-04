@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 
-namespace M1PetGame
+namespace M1Game
 {
     public class UITabbarItem : MonoBehaviour
     {

@@ -67,7 +67,7 @@ using Random = UnityEngine.Random;
 
         void RefreshMusicState()
         {
-            bool musicOn = PlayerPrefs.GetInt(M1PetGame.PetGameConstants.SETTINGS_MUSIC_KEY, 1) >= 1;
+            bool musicOn = PlayerPrefs.GetInt(M1Game.GameConstants.SETTINGS_MUSIC_KEY, 1) >= 1;
             audioMixer.SetFloat("MusicVolume", musicOn ? 1 : -80);
         }
 

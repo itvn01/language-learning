@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 
-namespace M1PetGame {
+namespace M1Game {
     public class UISwitchButton : MonoBehaviour
     {
         [SerializeField] Button btnSwitch;

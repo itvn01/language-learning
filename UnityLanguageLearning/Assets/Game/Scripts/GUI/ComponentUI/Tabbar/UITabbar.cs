@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-namespace M1PetGame
+namespace M1Game
 {
     public class UITabbar : MonoBehaviour
     {

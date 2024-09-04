@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace M1PetGame
+namespace M1Game
 {
     [Serializable]
-    public class PetSound
+    public class SoundItem
     {
         public string name;
         public AudioClip clip;

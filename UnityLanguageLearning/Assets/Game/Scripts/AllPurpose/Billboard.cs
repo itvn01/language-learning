@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace M1PetGame
+namespace M1Game
 {
     public class Billboard : MonoBehaviour
     {

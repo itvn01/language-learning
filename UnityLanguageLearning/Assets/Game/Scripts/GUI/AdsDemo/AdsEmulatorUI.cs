@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace M1PetGame
+namespace M1Game
 {
     public class AdsEmulatorUI : SingletonMB<AdsEmulatorUI>
     {

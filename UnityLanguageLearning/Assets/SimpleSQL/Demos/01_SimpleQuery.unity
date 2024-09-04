@@ -574,7 +574,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 965870716}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999724
+  m_Size: 0.9996196
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -740,11 +740,11 @@ MonoBehaviour:
   m_Script: {fileID: 1705125264, guid: 8382d7f8352b70544aa11f6729f875f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  databaseFile: {fileID: 4900000, guid: 24611e918d96fb64eba00a9c2b3365c8, type: 3}
+  databaseFile: {fileID: 4900000, guid: 837d5dac51ccb422f805c6cdb4eb0bb7, type: 3}
   overrideBasePath: 
   overridePathMode: 0
   changeWorkingName: 1
-  workingName: Fantasy.sqlite
+  workingName: Fantasy1.sqlite
   overwriteIfExists: 1
   debugTrace: 0
 --- !u!1 &965870715
@@ -855,7 +855,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00002463273}
+  m_AnchoredPosition: {x: 0, y: 0.00045773364}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1184230389

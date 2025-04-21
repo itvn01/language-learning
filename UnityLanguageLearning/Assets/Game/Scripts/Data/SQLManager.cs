@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SimpleSQL;
 using UnityEngine;
-namespace M1Game 
+namespace UMLanguage 
 {
     public class SQLManager : SingletonMB<SQLManager>
     {
@@ -57,7 +57,7 @@ namespace M1Game
             {
                 lessonStr += (i < total - 1 ? (listLesson[i].ToString() + ", ") : (listLesson[i].ToString()));
             }
-            lessonStr += " )";
+            lessonStr += ")";
             string query = "SELECT * FROM kanji WHERE lesson IN " + lessonStr;
             Debug.Log("query => " + query);
             List<KanjiInfo> listKanji = dbManager.Query<KanjiInfo>(query);
@@ -76,7 +76,7 @@ namespace M1Game
             {
                 idStr += (i < total - 1 ? (listID[i].ToString() + ", ") : (listID[i].ToString()));
             }
-            idStr += " )";
+            idStr += ")";
             string query = "SELECT * FROM word WHERE w_id IN " + idStr;
             Debug.Log("query => " + query);
             List<WordInfo> listWords = dbManager.Query<WordInfo>(query);

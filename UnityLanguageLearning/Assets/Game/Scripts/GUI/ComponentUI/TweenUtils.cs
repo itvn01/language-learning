@@ -5,15 +5,14 @@ using DG.Tweening;
 using System;
 using UMExtensions;
 
-namespace M1Game
+namespace UMLanguage
 {
     public static class TweenUtils
     {
         public static Tweener FadeIn(GameObject obj, float duration, Action complete = null, float delay = 0f)
         {
-            var canvasGroup = obj.GetOrAddComponent<CanvasGroup>();
-            canvasGroup.alpha = 0;
-            return TweenUtils.FadeTo(canvasGroup, 1f, duration, complete, delay);
+            obj.GetOrAddComponent<CanvasGroup>().alpha = 0;
+            return TweenUtils.FadeTo(obj, 1f, duration, complete, delay);
         }
 
         public static Tweener FadeOut(GameObject obj, float duration, Action complete = null, float delay = 0f)
@@ -23,7 +22,7 @@ namespace M1Game
 
         public static Tweener FadeTo(GameObject obj, float target, float duration, Action complete = null, float delay = 0f)
         {
-             var canvasGroup = obj.GetOrAddComponent<CanvasGroup>();
+            var canvasGroup = obj.GetOrAddComponent<CanvasGroup>();
             return TweenUtils.FadeTo(canvasGroup, target, duration, complete, delay);
         }
 
@@ -50,6 +49,12 @@ namespace M1Game
         {
             obj.transform.localScale = from;
             obj.transform.DOScale(to, duration).SetDelay(delay).OnStepComplete(() => complete?.Invoke());
+        }
+
+        public static void LocalScaleTo(GameObject obj, Vector3 from, Vector3 to, float duration, Ease ease, Action complete = null, float delay = 0f)
+        {
+            obj.transform.localScale = from;
+            obj.transform.DOScale(to, duration).SetDelay(delay).SetEase(ease).OnStepComplete(() => complete?.Invoke());
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace M1Game
+namespace UMLanguage
 {
     public static class GameConstants
     {

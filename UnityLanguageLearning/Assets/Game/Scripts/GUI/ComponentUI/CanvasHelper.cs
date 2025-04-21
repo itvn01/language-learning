@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace M1Game
+namespace UMLanguage
 {
     /// <summary>
     /// Safe area handler for iPhone X notch

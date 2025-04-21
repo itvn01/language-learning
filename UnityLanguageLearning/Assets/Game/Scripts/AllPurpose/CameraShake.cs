@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace M1Game
+namespace UMLanguage
 {
     public class CameraShake : MonoBehaviour
     {

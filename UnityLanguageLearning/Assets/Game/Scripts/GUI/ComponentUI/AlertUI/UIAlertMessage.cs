@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace M1Game
+namespace UMLanguage
 {
     public class UIAlertMessage : UIAlertBase
     {

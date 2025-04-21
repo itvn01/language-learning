@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 
-namespace M1Game
+namespace UMLanguage
 {
     public class UIAlertBase : UIPopupBase
     {

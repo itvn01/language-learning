@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace M1Game
+namespace UMLanguage
 {
     public class AdsEmulatorUI : SingletonMB<AdsEmulatorUI>
     {

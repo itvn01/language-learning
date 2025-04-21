@@ -4,7 +4,7 @@ using System;
 using DG.Tweening;
 using UMExtensions;
 
-namespace M1Game
+namespace UMLanguage
 {
     [System.Serializable]
     public enum TRANSITION_TYPE
@@ -19,6 +19,7 @@ namespace M1Game
 
     public class UIPopupBase : MonoBehaviour
     {
+        [Header("Base Popup")]
         [SerializeField] public GameObject popupObj;
         [SerializeField] public GameObject background;
         [SerializeField] Image blackPanel;
@@ -34,6 +35,38 @@ namespace M1Game
         public float BLACK_OPACITY = 180.0f / 255.0f;
         private bool _isAnimRunning = false;
         private Vector3 _originPosition;
+
+        public bool IsAnimRunning => _isAnimRunning;
+        protected Vector3 worldPosition;
+        private RectTransform rectTransform, parentRectTransform;
+        public Ease moveShowEase = Ease.OutCirc;
+        public Ease moveHideEase = Ease.OutCubic;
+
+        protected RectTransform ParentRectTransform
+        {
+            get
+            {
+                if (parentRectTransform == null)
+                {
+                    parentRectTransform = transform.parent.GetComponent<RectTransform>();
+                }
+
+                return parentRectTransform;
+            }
+        }
+
+        protected RectTransform RectTransform
+        {
+            get
+            {
+                if (rectTransform == null)
+                {
+                    rectTransform = transform.GetComponent<RectTransform>();
+                }
+
+                return rectTransform;
+            }
+        }
 
         protected virtual void Awake()
         {
@@ -59,11 +92,18 @@ namespace M1Game
                         btnClose = btnBlackClose;
                 }
             }
+
+            rectTransform = GetComponent<RectTransform>();
         }
 
         bool IsTransitionMove(TRANSITION_TYPE type)
         {
             return type != TRANSITION_TYPE.ZOOM && type != TRANSITION_TYPE.NONE;
+        }
+
+        Vector3 GetScaleTarget()
+        {
+            return isFadeBackground ? Vector3.one * 0.8f : Vector3.zero;
         }
 
         public virtual void Show(TRANSITION_TYPE showType = TRANSITION_TYPE.ZOOM, TRANSITION_TYPE hideType = TRANSITION_TYPE.ZOOM, Action callback = null)
@@ -79,7 +119,7 @@ namespace M1Game
             if (this.showType == TRANSITION_TYPE.ZOOM)
             {
 
-                this.background.transform.localScale = Vector3.one * 0.8f;
+                this.background.transform.localScale = GetScaleTarget();
                 this.background.transform.DOScale(Vector3.one, DURATION_ZOOM_SHOW).SetEase(Ease.OutBack).OnComplete(() =>
                 {
                     this.OnShowComplete(callback);
@@ -105,7 +145,7 @@ namespace M1Game
 
             if (this.hideType == TRANSITION_TYPE.ZOOM)
             {
-                this.background.transform.DOScale(Vector3.one * 0.8f, DURATION_ZOOM_HIDE).SetEase(Ease.InBack).OnComplete(() =>
+                this.background.transform.DOScale(GetScaleTarget(), DURATION_ZOOM_HIDE).SetEase(Ease.InBack).OnComplete(() =>
                 {
                     this.OnHideComplete(callback);
                 });
@@ -117,7 +157,8 @@ namespace M1Game
                     this.OnHideComplete(callback);
                 });
             }
-            else if (this.hideType == TRANSITION_TYPE.NONE) {
+            else if (this.hideType == TRANSITION_TYPE.NONE)
+            {
                 this.ActionWaitTime(DURATION_ZOOM_SHOW, () => this.OnHideComplete(callback));
             }
 
@@ -172,29 +213,29 @@ namespace M1Game
             switch (this.showType)
             {
                 case TRANSITION_TYPE.TOP:
-                    start_posision = new Vector3(target_position.x, target_position.y + height* 1.5f);
+                    start_posision = new Vector3(target_position.x, target_position.y + height * 1.5f);
                     break;
 
                 case TRANSITION_TYPE.BOTTOM:
-                    start_posision = new Vector3(target_position.x, target_position.y - height* 1.5f);
+                    start_posision = new Vector3(target_position.x, target_position.y - height * 1.5f);
                     break;
 
                 case TRANSITION_TYPE.LEFT:
-                    start_posision = new Vector3(target_position.x - width* 1.5f, target_position.y);
+                    start_posision = new Vector3(target_position.x - width * 1.5f, target_position.y);
                     break;
 
                 case TRANSITION_TYPE.RIGHT:
-                    start_posision = new Vector3(target_position.x + width* 1.5f, target_position.y);
+                    start_posision = new Vector3(target_position.x + width * 1.5f, target_position.y);
                     break;
 
                 default:
-                    start_posision = new Vector3(target_position.x, target_position.y + height* 1.5f);
+                    start_posision = new Vector3(target_position.x, target_position.y + height * 1.5f);
                     break;
             }
 
             // Debug.LogFormat("start_posision => {0}", start_posision.ToString());
             this.background.transform.localPosition = start_posision;
-            this.background.transform.DOLocalMove(target_position, DURATION_MOVE_SHOW).SetEase(Ease.OutCirc).OnComplete(() =>
+            this.background.transform.DOLocalMove(target_position, DURATION_MOVE_SHOW).SetEase(this.moveShowEase).OnComplete(() =>
             {
                 if (callback != null)
                 {
@@ -213,27 +254,27 @@ namespace M1Game
             switch (this.hideType)
             {
                 case TRANSITION_TYPE.TOP:
-                    target_position = new Vector3(start_posision.x, start_posision.y + height* 1.5f);
+                    target_position = new Vector3(start_posision.x, start_posision.y + height * 1.5f);
                     break;
 
                 case TRANSITION_TYPE.BOTTOM:
-                    target_position = new Vector3(start_posision.x, start_posision.y - height* 1.5f);
+                    target_position = new Vector3(start_posision.x, start_posision.y - height * 1.5f);
                     break;
 
                 case TRANSITION_TYPE.LEFT:
-                    target_position = new Vector3(start_posision.x - width* 1.5f, start_posision.y);
+                    target_position = new Vector3(start_posision.x - width * 1.5f, start_posision.y);
                     break;
 
                 case TRANSITION_TYPE.RIGHT:
-                    target_position = new Vector3(start_posision.x + width* 1.5f, start_posision.y);
+                    target_position = new Vector3(start_posision.x + width * 1.5f, start_posision.y);
                     break;
 
                 default:
-                    target_position = new Vector3(start_posision.x, start_posision.y + height* 1.5f);
+                    target_position = new Vector3(start_posision.x, start_posision.y + height * 1.5f);
                     break;
             }
 
-            this.background.transform.DOLocalMove(target_position, DURATION_MOVE_HIDE).SetEase(Ease.OutCubic).OnComplete(() =>
+            this.background.transform.DOLocalMove(target_position, DURATION_MOVE_HIDE).SetEase(this.moveHideEase).OnComplete(() =>
             {
                 if (callback != null)
                 {

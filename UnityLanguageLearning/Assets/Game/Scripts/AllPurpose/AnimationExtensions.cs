@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-namespace M1Game
+namespace UMLanguage
 {
     public static class AnimationExtensions
     {

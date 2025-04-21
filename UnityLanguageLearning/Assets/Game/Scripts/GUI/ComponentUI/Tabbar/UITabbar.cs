@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-namespace M1Game
+namespace UMLanguage
 {
     public class UITabbar : MonoBehaviour
     {

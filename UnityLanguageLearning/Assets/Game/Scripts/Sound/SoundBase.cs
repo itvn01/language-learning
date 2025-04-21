@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using Random = UnityEngine.Random;
-using M1Game;
+using UMLanguage;
 using UMExtensions;
 /// <summary>
 /// Sound manager
@@ -68,7 +68,7 @@ public class SoundBase : MonoBehaviour
 
     private void Start()
     {
-        bool soundOn = PlayerPrefs.GetInt(M1Game.GameConstants.SETTINGS_SOUND_KEY, 1) >= 1;
+        bool soundOn = PlayerPrefs.GetInt(UMLanguage.GameConstants.SETTINGS_SOUND_KEY, 1) >= 1;
         audioMixer.SetFloat("SoundVolume", soundOn ? 1 : -80);
     }
 
